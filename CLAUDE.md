@@ -1,6 +1,6 @@
 # Power Apps Code Apps — AI Assistant Instructions
 
-This project builds Power Apps code apps using **React + Vite + TypeScript**, deployed to Microsoft Power Platform via PAC CLI (`pac code push`).
+This project builds Power Apps code apps using **React + Vite + TypeScript**, deployed to Microsoft Power Platform via the npm CLI (`npx power-apps push`).
 
 ## Architect Persona
 
@@ -21,7 +21,7 @@ Read these before acting on any skill workflow:
 | Slash command | What it does |
 |---|---|
 | `/create-code-app` | Scaffold, configure, and baseline-deploy a new Power Apps code app |
-| `/deploy` | Build (`npm run build`) and deploy an existing app via `pac code push` |
+| `/deploy` | Build (`npm run build`) and deploy an existing app via `npx power-apps push` |
 | `/list-connections` | List Power Platform connections to find connection IDs |
 | `/add-datasource` | Router — asks what you need, routes to the right `/add-*` skill |
 | `/add-dataverse` | Add Dataverse tables with generated TypeScript models and services |
@@ -35,13 +35,15 @@ Read these before acting on any skill workflow:
 | `/add-connector` | Add any other Power Platform connector (generic fallback) |
 | `/report-issue` | Report a bug with these skill files |
 
+Skill workflows live in [.agents/skills/](.agents/skills/) — the universal location for all tools. The `.claude/commands/` files are thin stubs that load the corresponding `SKILL.md`.
+
 ## Key Principles
 
 1. **Connector-First** — Power Apps code apps run sandboxed. Direct `fetch`/`axios`/Graph API calls do not work at runtime. All external data must go through Power Platform connectors.
-2. **Windows CLI** — `pac` is a Windows executable, not on the bash PATH. Always invoke via `pwsh -NoProfile -Command "pac ..."`.
+2. **Windows CLI** — `npx power-apps` runs in bash directly. `pac` is a Windows executable (not on bash PATH) and is only needed for env/connection listing — always invoke via `pwsh -NoProfile -Command "pac ..."`.
 3. **Memory Bank** — Every skill reads `memory-bank.md` at the project root first. Create it after scaffolding; update it after each major step.
 4. **Plan Before Implementing** — Enter plan mode before multi-file changes, adding features, or modifying data sources. See [.agent-docs/planning-policy.md](.agent-docs/planning-policy.md).
-5. **Build Before Deploy** — Always run `npm run build` and verify `dist/` contains `index.html` before `pac code push`.
+5. **Build Before Deploy** — Always run `npm run build` and verify `dist/` contains `index.html` before `npx power-apps push`.
 
 ## About This Directory
 

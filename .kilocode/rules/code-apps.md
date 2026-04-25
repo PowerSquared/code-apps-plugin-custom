@@ -15,24 +15,24 @@ Read these before acting on any skill workflow:
 
 ## Available Skills
 
-Skill workflows are defined in `.claude/commands/`. Read the relevant file when the user invokes a skill.
+Skill workflows are defined in `.agents/skills/`. Read the relevant `SKILL.md` when the user invokes a skill.
 
 | Skill | File |
 |---|---|
-| Create a new code app | [.claude/commands/create-code-app.md](.claude/commands/create-code-app.md) |
-| Build and deploy | [.claude/commands/deploy.md](.claude/commands/deploy.md) |
-| List connections | [.claude/commands/list-connections.md](.claude/commands/list-connections.md) |
-| Add a data source (router) | [.claude/commands/add-datasource.md](.claude/commands/add-datasource.md) |
-| Add Dataverse | [.claude/commands/add-dataverse.md](.claude/commands/add-dataverse.md) |
-| Add SharePoint | [.claude/commands/add-sharepoint.md](.claude/commands/add-sharepoint.md) |
-| Add Excel | [.claude/commands/add-excel.md](.claude/commands/add-excel.md) |
-| Add OneDrive | [.claude/commands/add-onedrive.md](.claude/commands/add-onedrive.md) |
-| Add Teams | [.claude/commands/add-teams.md](.claude/commands/add-teams.md) |
-| Add Office 365 Outlook | [.claude/commands/add-office365.md](.claude/commands/add-office365.md) |
-| Add Azure DevOps | [.claude/commands/add-azuredevops.md](.claude/commands/add-azuredevops.md) |
-| Add Copilot Studio | [.claude/commands/add-mcscopilot.md](.claude/commands/add-mcscopilot.md) |
-| Add any connector | [.claude/commands/add-connector.md](.claude/commands/add-connector.md) |
-| Report an issue | [.claude/commands/report-issue.md](.claude/commands/report-issue.md) |
+| Create a new code app | [.agents/skills/create-code-app/SKILL.md](.agents/skills/create-code-app/SKILL.md) |
+| Build and deploy | [.agents/skills/deploy/SKILL.md](.agents/skills/deploy/SKILL.md) |
+| List connections | [.agents/skills/list-connections/SKILL.md](.agents/skills/list-connections/SKILL.md) |
+| Add a data source (router) | [.agents/skills/add-datasource/SKILL.md](.agents/skills/add-datasource/SKILL.md) |
+| Add Dataverse | [.agents/skills/add-dataverse/SKILL.md](.agents/skills/add-dataverse/SKILL.md) |
+| Add SharePoint | [.agents/skills/add-sharepoint/SKILL.md](.agents/skills/add-sharepoint/SKILL.md) |
+| Add Excel | [.agents/skills/add-excel/SKILL.md](.agents/skills/add-excel/SKILL.md) |
+| Add OneDrive | [.agents/skills/add-onedrive/SKILL.md](.agents/skills/add-onedrive/SKILL.md) |
+| Add Teams | [.agents/skills/add-teams/SKILL.md](.agents/skills/add-teams/SKILL.md) |
+| Add Office 365 Outlook | [.agents/skills/add-office365/SKILL.md](.agents/skills/add-office365/SKILL.md) |
+| Add Azure DevOps | [.agents/skills/add-azuredevops/SKILL.md](.agents/skills/add-azuredevops/SKILL.md) |
+| Add Copilot Studio | [.agents/skills/add-mcscopilot/SKILL.md](.agents/skills/add-mcscopilot/SKILL.md) |
+| Add any connector | [.agents/skills/add-connector/SKILL.md](.agents/skills/add-connector/SKILL.md) |
+| Report an issue | [.agents/skills/report-issue/SKILL.md](.agents/skills/report-issue/SKILL.md) |
 
 ## Key Principles
 
@@ -40,4 +40,4 @@ Skill workflows are defined in `.claude/commands/`. Read the relevant file when 
 2. **Windows CLI** — `pac` is a Windows executable, not on the bash PATH. Always invoke via `pwsh -NoProfile -Command "pac ..."`.
 3. **Memory Bank** — Every skill reads `memory-bank.md` at the project root first. Create it after scaffolding; update it after each major step.
 4. **Plan Before Implementing** — Enter plan mode before multi-file changes, adding features, or modifying data sources.
-5. **Build Before Deploy** — Always run `npm run build` and verify `dist/` contains `index.html` before `pac code push`.
+5. **Build Before Deploy** — Always run `npm run build` and verify `dist/` contains `index.html` before `npx power-apps push`.

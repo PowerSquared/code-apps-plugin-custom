@@ -38,13 +38,12 @@ Verify prerequisites before proceeding with any implementation work:
 
 ```bash
 node --version                         # Must be v22+
-pwsh -NoProfile -Command "pac"         # Windows executable — must use pwsh
 ```
 
 - **Node.js below v22**: Report "Node.js 22+ is required. Upgrade or switch with `nvm use 22`." and STOP.
-- **Missing @microsoft/power-apps-cli**: Report "Install with `npm install -g @microsoft/power-apps-cli`." and STOP.
-- **Missing pac**: Report "Install Power Platform CLI from https://aka.ms/PowerAppsCLI." and STOP.
 - **All present**: Report versions and proceed.
+
+Note: `pac` CLI is only required for environment listing (`pac env list`) and connection listing (`pac connection list`). All code app commands (init, push, add-data-source, list-datasets, list-tables) use `npx power-apps`.
 
 ## Key Considerations for Power Apps Code Apps
 
@@ -66,11 +65,11 @@ pwsh -NoProfile -Command "pac"         # Windows executable — must use pwsh
 
 **If none of the specific skills match**, invoke `/add-connector` — it handles any connector not covered above. Browse available connectors at https://learn.microsoft.com/en-us/connectors/connector-reference/ to find the correct API name. **If no connector exists for the required functionality, tell the user clearly and do not implement a direct API call as a workaround — it will not work in production.**
 
-**Connection IDs**: All non-Dataverse connectors require a connection ID (`-c` flag). Run `/list-connections` to find it, then run `pwsh -NoProfile -Command "pac code add-data-source -a <connector> -c <connection-id>"`.
+**Connection IDs**: All non-Dataverse connectors require a connection ID (`-c` flag). Run `/list-connections` to find it, then run `npx power-apps add-data-source -a <connector> -c <connection-id>`.
 
 ### Generated Code Pattern
 
-Code apps use `pac code add-data-source` to generate typed services:
+Code apps use `npx power-apps add-data-source` to generate typed services:
 - `src/generated/models/{Table}Model.ts` -- TypeScript interfaces
 - `src/generated/services/{Table}Service.ts` -- CRUD methods
 
@@ -86,10 +85,10 @@ cd {folder}
 npm install
 ```
 
-After scaffolding, initialize with the npm package:
+After scaffolding, initialize with the npm CLI (handles auth automatically):
 
 ```bash
-pwsh -NoProfile -Command "pac code init --displayName '{app-name}' -e <environment-id>"
+npx power-apps init --display-name "{app-name}" --environment-id <environment-id>
 ```
 
 ### Dataverse Gotchas
@@ -111,14 +110,24 @@ pwsh -NoProfile -Command "pac code init --displayName '{app-name}' -e <environme
 
 Check `power.config.json` in the project root for an `environmentId` — use it if present. Otherwise ask the user which environment to use. Only use a different environment if the user explicitly requests it.
 
-### Running pac on Windows
+### CLI Commands: npm vs pac
+
+`npx power-apps` commands run natively in bash — no wrapper needed:
+
+```bash
+npx power-apps init --display-name "<app-name>" --environment-id <env-id>
+npx power-apps push
+npx power-apps run
+```
 
 `pac` is a Windows executable — **not** on the bash PATH. Always call it via PowerShell:
 
 ```bash
 pwsh -NoProfile -Command "pac auth list"
+pwsh -NoProfile -Command "pac env list"
 pwsh -NoProfile -Command "pac env select --environment <id>"
 pwsh -NoProfile -Command "pac org who"
+npx power-apps add-data-source -a <api> -c <connection-id>
 ```
 
 Never run `pac <args>` directly in bash (command not found). Never use `cmd /c pac` — CLINK intercepts `cmd.exe` and swallows output.
@@ -126,7 +135,7 @@ Never run `pac <args>` directly in bash (command not found). Never use `cmd /c p
 ### Build Requirements
 
 Key rules:
-- Always `npm run build` before `pac code push`
+- Always `npm run build` before `npx power-apps push`
 - Remove unused imports (TS6133 strict mode)
 - Don't edit files in `src/generated/` unless fixing known issues
 - Node.js 22+ required — `code add-data-source` rejects older versions

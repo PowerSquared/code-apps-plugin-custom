@@ -10,7 +10,7 @@ All skills reference this single file. When new shared instructions are added, u
 
 ### MUST (required before acting)
 
-- **Confirm before any deployment**: Before running `pac code push`, ask: _"Ready to deploy to [environment name]? This will update the live app."_ Wait for explicit user confirmation.
+- **Confirm before any deployment**: Before running `npx power-apps push`, ask: _"Ready to deploy to [environment name]? This will update the live app."_ Wait for explicit user confirmation.
   Exception: the baseline deploy in `create-code-app` Step 7 is pre-approved as part of the scaffold flow. The final deploy in Step 10 still requires confirmation.
 - **Confirm before any global install**: Before running `npm install -g ...` or `winget install ...`, ask: _"This will install [tool] globally on your machine. OK to proceed?"_ Wait for explicit user confirmation. This applies even when the install is a documented prerequisite.
 - **Confirm before writing outside project root**: Before writing, editing, or deleting any file that is not inside the current project directory, ask the user for confirmation.
@@ -18,7 +18,7 @@ All skills reference this single file. When new shared instructions are added, u
 
 ### MUST NOT
 
-- MUST NOT run `pac code push` if `npm run build` has not succeeded in the current session.
+- MUST NOT run `npx power-apps push` if `npm run build` has not succeeded in the current session.
 - MUST NOT edit any file under `src/generated/` unless the step explicitly calls for it (e.g., the `add-azuredevops` HttpRequest fix).
 - MUST NOT install packages globally (`npm install -g`, `winget install`) without user confirmation.
 - MUST NOT make changes outside the project root without user confirmation.
@@ -66,7 +66,7 @@ Standards for versioning, theme, build workflow, and TypeScript strict mode.
 **Key Points:**
 - Always display version in UI, increment on each deploy
 - Default to dark theme (user can override)
-- Always `npm run build` before `pac code push` -- never skip the build
+- Always `npm run build` before `npx power-apps push` -- never skip the build
 - Remove unused imports before building (TS6133 strict mode)
 
 ---
@@ -100,8 +100,7 @@ All non-Dataverse connectors require a connection ID. Read this before any `/add
 
 **Key Points:**
 - Run `/list-connections` to find the connection ID before adding a connector
-- Always pass `-c <connection-id>` to `pac code add-data-source`
-- Run all `pac code` commands via `pwsh -NoProfile -Command "pac code ..."`
+- Always pass `-c <connection-id>` to `npx power-apps add-data-source`
 
 ---
 
@@ -120,18 +119,24 @@ When selecting an environment, use this priority order: `power.config.json` → 
 
 ## Windows CLI Compatibility
 
-The shell running Bash tool commands is bash on Windows. The `pac` CLI is a Windows executable and is **not** on the bash PATH.
+The shell running Bash tool commands is bash on Windows.
 
-**Always invoke `pac` via `pwsh -NoProfile -Command`:**
+**`npx power-apps` commands run natively in bash** — no `pwsh` wrapper needed:
+
+```bash
+npx power-apps init --display-name "<app-name>" --environment-id <env-id>
+npx power-apps push
+npx power-apps run
+```
+
+**`pac` is a Windows executable and is NOT on the bash PATH.** Always invoke it via `pwsh -NoProfile -Command`:
 
 ```bash
 pwsh -NoProfile -Command "pac auth list"
 pwsh -NoProfile -Command "pac auth clear"
 pwsh -NoProfile -Command "pac env list"
 pwsh -NoProfile -Command "pac env select --environment <id>"
-pwsh -NoProfile -Command "pac code init --displayName '<app-name>' -e <env-id>"
-pwsh -NoProfile -Command "pac code add-data-source -a <api-name> -c <connection-id>"
-pwsh -NoProfile -Command "pac code push"
+pwsh -NoProfile -Command "pac connection list"
 ```
 
 **Prohibited patterns — never use these, even as a fallback:**
@@ -150,7 +155,7 @@ To verify pac is authenticated, run `pwsh -NoProfile -Command "pac auth list"` �
 
 ## Command Failure Handling
 
-Apply these rules whenever a `pac` or `npm` command exits non-zero. Do NOT retry silently or proceed past a failure.
+Apply these rules whenever a `pac`, `npm`, or `npx power-apps` command exits non-zero. Do NOT retry silently or proceed past a failure.
 
 ### `npm run build` failures
 
@@ -167,16 +172,24 @@ Apply these rules whenever a `pac` or `npm` command exits non-zero. Do NOT retry
 **Example — build error requiring user input:**
 > "Build failed with an error I cannot automatically fix: `[exact error text]`. Please review the error above and let me know how you'd like to proceed."
 
-### `pac code add-data-source` failures
+### `npx power-apps push` failures
+
+| Condition | Action |
+| --- | --- |
+| Auth error / sign-in prompt | Re-run `npx power-apps push`; the CLI prompts for sign-in automatically. |
+| "environment not found" | Verify `power.config.json` contains the correct `environmentId`. STOP. |
+| Any other non-zero exit | Report the exact error output. STOP. Do not retry silently. |
+
+### `npx power-apps add-data-source` failures
 
 | Condition | Action |
 | --- | --- |
 | Non-zero exit / error output | Report the exact error. STOP. Do not continue to the build step. |
 | "connectionId not found" or empty `-c` | Ask the user to run `/list-connections` to get a valid connection ID and retry. |
-| "environment not set" or missing envId | Run `pwsh -NoProfile -Command "pac env select --environment <id>"` and retry once. |
+| "environment not set" or missing envId | Verify `power.config.json` contains the correct `environmentId` and retry once. |
 
 **Example:**
-> "The `pac code add-data-source` command failed: `Error: connectionId 'abc123' not found in environment.` Please run `/list-connections` to confirm the connection exists and get the correct ID."
+> "The `npx power-apps add-data-source` command failed: `Error: connectionId 'abc123' not found in environment.` Please run `/list-connections` to confirm the connection exists and get the correct ID."
 
 ---
 

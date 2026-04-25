@@ -4,7 +4,7 @@ Applies to all connector skills (`/add-azuredevops`, `/add-teams`, `/add-excel`,
 
 ## Connection ID (Required)
 
-All non-Dataverse connectors require a **connection ID** (`-c`) when adding via `pac code add-data-source`. Without it, the command fails with: `CONNECTION_ID argument is required for connector data sources`.
+All non-Dataverse connectors require a **connection ID** (`-c`) when adding via `npx power-apps add-data-source`. Without it, the command fails with: `CONNECTION_ID argument is required for connector data sources`.
 
 ### Step 1: List Existing Connections
 
@@ -28,10 +28,10 @@ Always pass `-c <connection-id>` when adding a connector:
 
 ```bash
 # Non-tabular connectors
-pwsh -NoProfile -Command "pac code add-data-source -a <api-name> -c <connection-id>"
+npx power-apps add-data-source -a <api-name> -c <connection-id>
 
 # Tabular connectors (also need -d and -t)
-pwsh -NoProfile -Command "pac code add-data-source -a <api-name> -c <connection-id> -d '<dataset>' -t '<table>'"
+npx power-apps add-data-source -a <api-name> -c <connection-id> -d '<dataset>' -t '<table>'
 ```
 
 
