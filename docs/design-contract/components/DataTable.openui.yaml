@@ -1,0 +1,51 @@
+name: DataTable
+description: Displays the asset register as a scrollable, selectable table of rows.
+
+anatomy:
+  - name: Root
+    description: Outer container with border, border-radius, and overflow hidden.
+  - name: Header
+    description: Sticky first row containing ColumnHeader cells; surface-2 background.
+  - name: ColumnHeader
+    description: A single header cell; label typography, text-subtle colour.
+  - name: Body
+    description: Scrollable list of Row elements.
+  - name: Row
+    description: A single asset row; interactive — hover and selected states.
+  - name: AssetCell
+    description: First column cell containing asset name (bold) and serial number (muted, smaller).
+  - name: Cell
+    description: All other data cells.
+
+props:
+  - name: assets
+    type: Asset[]
+    required: true
+  - name: selectedId
+    type: string
+    required: false
+    description: ID of the currently selected asset row.
+  - name: density
+    type: number
+    default: 1
+    description: "Row height multiplier applied to cell vertical padding (range: 0.7–1.4)."
+
+states:
+  - name: default
+  - name: row-hover
+    trigger: pointer enters a Row
+  - name: row-selected
+    trigger: row's asset ID matches selectedId prop
+  - name: empty
+    trigger: assets array is empty; renders EmptyState in place of Body
+
+events:
+  - name: onRowClick
+    payload: "{ asset: Asset }"
+  - name: onSort
+    payload: "{ column: string, direction: 'asc' | 'desc' }"
+
+accessibility:
+  role: table
+  keyboard: Arrow keys navigate rows. Enter or Space selects. Home/End jump to first/last row.
+  notes: Column headers that are sortable must have aria-sort set.

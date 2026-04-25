@@ -1,0 +1,34 @@
+name: EmptyState
+description: Communicates that a view has no records yet and guides the user toward the first action.
+
+anatomy:
+  - name: Root
+    description: Centred grid area occupying the full main column; generous vertical padding.
+  - name: Title
+    description: Short serif heading (heading-sm).
+  - name: Subtitle
+    description: One or two descriptive sentences in body type, muted, max-width 340px.
+  - name: Actions
+    description: Horizontal group of up to two buttons; primary action first.
+
+props:
+  - name: title
+    type: string
+    required: true
+  - name: subtitle
+    type: string
+    required: false
+  - name: primaryAction
+    type: "{ label: string, icon?: string, onClick: () => void }"
+    required: false
+  - name: secondaryAction
+    type: "{ label: string, icon?: string, onClick: () => void }"
+    required: false
+
+states:
+  - name: default
+    description: Static display; no interactive states on the container.
+
+accessibility:
+  role: region
+  notes: aria-label describing the context (e.g. "No assets registered").

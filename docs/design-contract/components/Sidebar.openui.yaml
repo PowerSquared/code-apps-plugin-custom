@@ -1,0 +1,44 @@
+name: Sidebar
+description: Fixed left navigation column providing the app brand mark, section links, and the current user identity.
+
+anatomy:
+  - name: Root
+    description: 220px column; surface-2 background; right hairline border.
+  - name: Brand
+    description: Meridian mark (SVG icon) + wordmark in sidebar-wm typography; top of the column.
+  - name: Nav
+    description: Vertical list of NavItem elements.
+  - name: NavItem
+    description: Icon + label + optional count badge; active state has surface background.
+  - name: NavCount
+    description: Right-aligned numeric count in text-subtle; shown on some nav items.
+  - name: Footer
+    description: User Avatar + name + role; top border separates from nav; pinned to bottom.
+
+props:
+  - name: items
+    type: NavItem[]
+    required: true
+  - name: activeItem
+    type: string
+    required: true
+    description: Label of the currently active navigation item.
+  - name: user
+    type: "{ name: string, role: string }"
+    required: true
+
+states:
+  - name: default
+  - name: item-hover
+    trigger: pointer enters a NavItem that is not active
+  - name: item-active
+    trigger: NavItem label matches activeItem prop
+
+events:
+  - name: onNavigate
+    payload: "{ item: NavItem }"
+
+accessibility:
+  role: navigation
+  keyboard: Tab/Shift-Tab moves between items. Enter activates.
+  notes: Mark the active item with aria-current="page".

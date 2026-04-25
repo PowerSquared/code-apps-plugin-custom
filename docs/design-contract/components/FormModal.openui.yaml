@@ -1,0 +1,39 @@
+name: FormModal
+description: A centred modal dialog for registering a new asset; the only elevated surface in the product.
+
+anatomy:
+  - name: Overlay
+    description: Full-screen dimmed backdrop (rgba(31,32,36,0.35)) with a 2px blur behind.
+  - name: Root
+    description: 520px wide surface container; rounded xl; shadow.modal elevation.
+  - name: Header
+    description: Form title (heading-sm serif) and subtitle (body, muted).
+  - name: Body
+    description: Vertical stack of FormField rows; some rows use a 2-column grid.
+  - name: StatusPicker
+    description: 4-column grid of status options; each option wraps a StatusBadge.
+  - name: Footer
+    description: Right-aligned Cancel (secondary) and Save asset (primary) buttons; top border.
+
+props:
+  - name: open
+    type: boolean
+    required: true
+  - name: initialValues
+    type: Partial<Asset>
+    required: false
+
+states:
+  - name: open
+  - name: closed
+
+events:
+  - name: onSave
+    payload: Asset
+  - name: onCancel
+    payload: void
+
+accessibility:
+  role: dialog
+  keyboard: Escape cancels. Tab cycles through fields. Enter on Save submits.
+  notes: aria-modal="true". Focus moves to the first field on open. Trap focus within the modal.

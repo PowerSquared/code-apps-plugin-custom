@@ -1,0 +1,36 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir /c/code/code-apps-plugin-custom)",
+      "PowerShell(\\(Get-Item \"C:\\\\code\\\\code-apps-plugin-custom\"\\).Attributes)",
+      "PowerShell(Get-ChildItem -Path \"C:\\\\code\\\\code-apps-plugin-custom\" -Force -Recurse | Select-Object FullName, @{Name='Type'; Expression={if\\($_.PSIsContainer\\) {'DIR'} else {'FILE'}}} | Format-Table -AutoSize)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(curl -s \"https://raw.githubusercontent.com/microsoft/power-platform-skills/main/plugins/code-apps/shared/shared-instructions.md\")",
+      "Bash(curl -s \"https://raw.githubusercontent.com/microsoft/power-platform-skills/main/plugins/code-apps/shared/connector-reference.md\")",
+      "Bash(curl -s \"https://raw.githubusercontent.com/microsoft/power-platform-skills/main/plugins/code-apps/shared/development-standards.md\")",
+      "Bash(curl -s \"https://raw.githubusercontent.com/microsoft/power-platform-skills/main/plugins/code-apps/shared/memory-bank.md\")",
+      "Bash(curl -s \"https://raw.githubusercontent.com/microsoft/power-platform-skills/main/plugins/code-apps/shared/planning-policy.md\")",
+      "Bash(curl -s \"https://raw.githubusercontent.com/microsoft/power-platform-skills/main/plugins/code-apps/shared/preferred-environment.md\")",
+      "Bash(curl -s \"https://raw.githubusercontent.com/microsoft/power-platform-skills/main/plugins/code-apps/agents/code-app-architect.md\")",
+      "Bash(curl -s \"https://raw.githubusercontent.com/microsoft/power-platform-skills/main/plugins/code-apps/skills/create-code-app/SKILL.md\")",
+      "Bash(curl -s \"https://raw.githubusercontent.com/microsoft/power-platform-skills/main/plugins/code-apps/skills/create-code-app/references/prerequisites-reference.md\")",
+      "Bash(curl -s \"https://raw.githubusercontent.com/microsoft/power-platform-skills/main/plugins/code-apps/skills/create-code-app/references/troubleshooting.md\")",
+      "Bash(curl -s \"https://raw.githubusercontent.com/microsoft/power-platform-skills/main/plugins/code-apps/skills/deploy/SKILL.md\")",
+      "Bash(curl -s \"https://raw.githubusercontent.com/microsoft/power-platform-skills/main/plugins/code-apps/skills/list-connections/SKILL.md\")",
+      "Bash(curl -s \"https://raw.githubusercontent.com/microsoft/power-platform-skills/main/plugins/code-apps/skills/add-datasource/SKILL.md\")",
+      "Bash(curl -s \"https://raw.githubusercontent.com/microsoft/power-platform-skills/main/plugins/code-apps/skills/add-dataverse/SKILL.md\")",
+      "Bash(curl -s \"https://raw.githubusercontent.com/microsoft/power-platform-skills/main/plugins/code-apps/skills/add-dataverse/references/dataverse-reference.md\")",
+      "Bash(curl -s \"https://raw.githubusercontent.com/microsoft/power-platform-skills/main/plugins/code-apps/skills/add-dataverse/references/api-authentication-reference.md\")",
+      "Bash(curl -s \"https://raw.githubusercontent.com/microsoft/power-platform-skills/main/plugins/code-apps/skills/add-dataverse/references/data-architecture-reference.md\")",
+      "Bash(curl -s \"https://raw.githubusercontent.com/microsoft/power-platform-skills/main/plugins/code-apps/skills/add-dataverse/references/table-management-reference.md\")",
+      "Bash(curl -s \"https://raw.githubusercontent.com/microsoft/power-platform-skills/main/plugins/code-apps/skills/add-excel/SKILL.md\")",
+      "Bash(curl -s \"https://raw.githubusercontent.com/microsoft/power-platform-skills/main/plugins/code-apps/skills/add-teams/SKILL.md\")",
+      "Bash(curl -s \"https://raw.githubusercontent.com/microsoft/power-platform-skills/main/plugins/code-apps/skills/add-office365/SKILL.md\")",
+      "Bash(curl -s \"https://raw.githubusercontent.com/microsoft/power-platform-skills/main/plugins/code-apps/skills/add-azuredevops/SKILL.md\")",
+      "Bash(curl -s \"https://raw.githubusercontent.com/microsoft/power-platform-skills/main/plugins/code-apps/skills/add-mcscopilot/SKILL.md\")",
+      "Bash(curl -s \"https://raw.githubusercontent.com/microsoft/power-platform-skills/main/plugins/code-apps/skills/add-connector/SKILL.md\")",
+      "Bash(curl -s \"https://raw.githubusercontent.com/microsoft/power-platform-skills/main/plugins/code-apps/skills/report-issue/SKILL.md\")"
+    ]
+  }
+}

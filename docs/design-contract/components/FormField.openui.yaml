@@ -1,0 +1,46 @@
+name: FormField
+description: A label paired with a text input or select control; the standard unit of form composition.
+
+anatomy:
+  - name: Root
+    description: Vertical flex column; gap between label and control is 6px.
+  - name: Label
+    description: 12px weight-500 sans-serif; text-muted colour. Always rendered as an HTML label.
+  - name: Input
+    description: Text input; surface background; border-strong border; radius md.
+  - name: Select
+    description: Dropdown select; identical visual treatment to Input.
+
+props:
+  - name: label
+    type: string
+    required: true
+  - name: type
+    type: "'text' | 'select'"
+    default: "'text'"
+  - name: options
+    type: string[]
+    required: false
+    description: Required when type is 'select'.
+  - name: value
+    type: string
+    required: false
+  - name: placeholder
+    type: string
+    required: false
+
+states:
+  - name: default
+  - name: focus
+    trigger: Input or Select receives keyboard focus; accent border + focus-ring shadow.
+  - name: filled
+    description: Value is non-empty.
+
+events:
+  - name: onChange
+    payload: "{ value: string }"
+
+accessibility:
+  role: group
+  keyboard: Tab focuses the control. Standard text input and select keyboard behaviour applies.
+  notes: The Label must be associated with the control via htmlFor / id. Never use placeholder as a substitute for a label.

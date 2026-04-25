@@ -1,0 +1,26 @@
+name: Avatar
+description: Displays a person's initials in a circular container as a compact identity mark.
+
+anatomy:
+  - name: Root
+    description: Circular container with accent-soft background and accent-ink text.
+  - name: Initials
+    description: Up to two uppercase letters derived from the person's name.
+
+props:
+  - name: name
+    type: string
+    required: true
+    description: Full name; initials are derived automatically (first letter of each word, max 2).
+  - name: size
+    type: number
+    default: 28
+    description: Diameter in pixels.
+
+states:
+  - name: default
+    description: Static display.
+
+accessibility:
+  role: img
+  notes: Provide an aria-label with the full name. Do not rely on initials alone.

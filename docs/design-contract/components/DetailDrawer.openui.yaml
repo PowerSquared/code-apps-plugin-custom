@@ -1,0 +1,46 @@
+name: DetailDrawer
+description: An in-page panel that slides in from the right to show full details for the selected asset.
+
+anatomy:
+  - name: Root
+    description: 440px fixed-width panel; surface background; left border separates it from the table.
+  - name: CloseButton
+    description: Ghost button, self-aligned to the right, dismisses the drawer.
+  - name: Identity
+    description: Asset name (heading-md serif), subtitle (id · serial), status badge, and type tag.
+  - name: AssigneeSection
+    description: Section label + AssigneeCard or unassigned placeholder.
+  - name: AssigneeCard
+    description: surface-2 card containing Avatar, name, and email.
+  - name: DetailsSection
+    description: Section label + FieldList of asset metadata.
+  - name: FieldList
+    description: Stacked key-value rows; label column is fixed 130px wide.
+  - name: Actions
+    description: Edit (secondary button) and Reassign (ghost button), pinned to the bottom.
+
+props:
+  - name: asset
+    type: Asset
+    required: true
+
+states:
+  - name: assigned
+    description: AssigneeCard shows avatar, name, and email.
+  - name: unassigned
+    description: AssigneeCard shows italic placeholder text centered in the card.
+  - name: closed
+    description: Drawer is not rendered.
+
+events:
+  - name: onClose
+    payload: void
+  - name: onEdit
+    payload: "{ asset: Asset }"
+  - name: onReassign
+    payload: "{ asset: Asset }"
+
+accessibility:
+  role: complementary
+  keyboard: Escape closes the drawer and returns focus to the triggering row. Tab cycles through interactive elements inside.
+  notes: Trap focus within the drawer while open.

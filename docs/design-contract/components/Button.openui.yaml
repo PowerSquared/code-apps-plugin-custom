@@ -1,0 +1,40 @@
+name: Button
+description: Triggers an action; appears in three visual variants reflecting importance.
+
+anatomy:
+  - name: Root
+    description: The clickable element; an HTML button.
+  - name: Icon
+    description: Optional leading or trailing icon, 12–14px, stroke matches label colour.
+  - name: Label
+    description: Short text label; always present.
+
+props:
+  - name: variant
+    type: "'primary' | 'secondary' | 'ghost'"
+    default: "'secondary'"
+  - name: icon
+    type: string
+    required: false
+    description: Icon name to render before the label.
+  - name: disabled
+    type: boolean
+    default: false
+
+states:
+  - name: default
+  - name: hover
+    trigger: pointer enters Root
+  - name: active
+    trigger: pointer pressed on Root
+  - name: disabled
+    trigger: disabled prop is true; no pointer events, reduced opacity
+
+events:
+  - name: onClick
+    payload: MouseEvent
+
+accessibility:
+  role: button
+  keyboard: Space or Enter activates. Tab focuses.
+  notes: Never remove the visible label. Icon-only variants must include an aria-label.

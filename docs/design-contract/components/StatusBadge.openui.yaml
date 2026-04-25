@@ -1,0 +1,23 @@
+name: StatusBadge
+description: Communicates the lifecycle state of an asset using a coloured dot, label, and soft pill background.
+
+anatomy:
+  - name: Root
+    description: Pill-shaped container; background and text colour both vary by status.
+  - name: Dot
+    description: 6×6px filled circle; same colour as the label text.
+  - name: Label
+    description: Human-readable status name; always present.
+
+props:
+  - name: status
+    type: "'available' | 'inuse' | 'maint' | 'retired'"
+    required: true
+
+states:
+  - name: default
+    description: Static display; no interactive states.
+
+accessibility:
+  role: status
+  notes: The parent row or container must not rely on the badge colour alone; the text label is always rendered.
