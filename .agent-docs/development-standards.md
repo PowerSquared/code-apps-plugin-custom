@@ -2,11 +2,6 @@
 
 Standards that apply to all Power Apps code app skills.
 
-## Theme
-
-- Default to dark theme (`backgroundColor: '#1e1e1e'`, `color: '#fff'`)
-- User can override theme preference
-
 ## Node.js
 
 - **Node.js 22+ is required** -- `@microsoft/power-apps-cli code add-data-source` rejects Node 20 and earlier
