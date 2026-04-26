@@ -23,6 +23,7 @@ Build a lightweight, internal web application that serves as the single source o
 ## 3. Scope
 
 **In scope (v1.0):**
+
 - Asset register (create, view, edit, retire assets)
 - Assignment tracking (assign/reassign assets to employees)
 - Lifecycle status management (Available → In use → Maintenance → Retired)
@@ -31,6 +32,7 @@ Build a lightweight, internal web application that serves as the single source o
 - Empty state onboarding (add first asset)
 
 **Out of scope (v1.0):**
+
 - MDM or automated hardware discovery
 - Financial depreciation or reporting
 - Purchase order / procurement workflows
@@ -43,11 +45,11 @@ Build a lightweight, internal web application that serves as the single source o
 
 ## 4. Users & Personas
 
-| Persona | Role | Primary Jobs to Be Done |
-|---|---|---|
-| **IT Manager** | Power user; owns the register | Add new assets, reassign equipment, retire old devices, confirm availability before onboarding |
-| **IT Coordinator** | Daily operator | Look up who holds a specific laptop, check maintenance queue, update serial numbers |
-| **Team Lead** | Occasional viewer | Confirm what equipment a team member holds; check if spares are available |
+| Persona            | Role                          | Primary Jobs to Be Done                                                                        |
+| ------------------ | ----------------------------- | ---------------------------------------------------------------------------------------------- |
+| **IT Manager**     | Power user; owns the register | Add new assets, reassign equipment, retire old devices, confirm availability before onboarding |
+| **IT Coordinator** | Daily operator                | Look up who holds a specific laptop, check maintenance queue, update serial numbers            |
+| **Team Lead**      | Occasional viewer             | Confirm what equipment a team member holds; check if spares are available                      |
 
 ---
 
@@ -58,6 +60,7 @@ Build a lightweight, internal web application that serves as the single source o
 **As an IT Coordinator, I want to see all assets in a table so I can understand the full inventory at a glance.**
 
 Acceptance criteria:
+
 - Displays all assets with columns: Asset (name + serial), Type, Assigned to, Status.
 - Table header is sticky when scrolling.
 - Each row shows the correct status badge (colour + label) for the asset's current lifecycle state.
@@ -71,6 +74,7 @@ Acceptance criteria:
 **As an IT Manager, I want to search by name, serial number, or assignee so I can find a specific asset without scrolling.**
 
 Acceptance criteria:
+
 - Single search field queries asset name, serial number, and assignee name simultaneously.
 - Results update as the user types (debounced ≤ 200ms).
 - Type filter dropdown narrows results to: Laptop / Monitor / Accessory / Tablet.
@@ -86,6 +90,7 @@ Acceptance criteria:
 **As an IT Coordinator, I want to click an asset and see its full details without leaving the list so I can answer questions quickly without losing my place.**
 
 Acceptance criteria:
+
 - Clicking a row opens a 440px detail drawer on the right; the table remains visible and interactive.
 - Drawer shows: asset name, ID, serial number, status badge, type tag, assignee (name + email), and all detail fields (location, purchased, warranty, value).
 - If the warranty date is within 30 days or has already passed, the warranty field shows a visual warning indicator alongside the date.
@@ -101,6 +106,7 @@ Acceptance criteria:
 **As an IT Manager, I want to register a new asset so it is tracked from the day it arrives.**
 
 Acceptance criteria:
+
 - "Add asset" button opens a centred modal with fields: Name, Type (select), Serial number, Assigned to (employee lookup, optional), Status (visual picker).
 - Name, Type, Serial number, and Status are required; the Save button is disabled until these are valid.
 - Inline validation errors appear below each invalid field on attempted save.
@@ -117,6 +123,7 @@ Acceptance criteria:
 **As an IT Manager, I want to correct or update an asset's details so the register stays accurate.**
 
 Acceptance criteria:
+
 - The "Edit" button in the detail drawer opens the asset's fields for editing.
 - All fields from the add form are editable.
 - Saving updates the asset in place; the drawer reflects the new values immediately.
@@ -129,6 +136,7 @@ Acceptance criteria:
 **As an IT Manager, I want to assign an available asset to an employee — or move it from one person to another — so the register reflects the current holder.**
 
 Acceptance criteria:
+
 - The "Reassign" button in the detail drawer opens an assignee picker.
 - The picker searches employees by name or email.
 - Saving updates the "Assigned to" field and changes status to "In use" if it was "Available".
@@ -142,6 +150,7 @@ Acceptance criteria:
 **As an IT Manager, I want to mark an asset as retired so it no longer appears in the active inventory but is not deleted.**
 
 Acceptance criteria:
+
 - Status can be set to "Retired" via the Add/Edit form or via a direct status change in the drawer.
 - Retired assets remain in the register and are visible via the Retired filter or the Retired section in the sidebar.
 - Retiring an assigned asset automatically clears the assignee.
@@ -153,6 +162,7 @@ Acceptance criteria:
 **As a first-time IT Manager, I want to be guided to add my first asset so I am not stuck in front of a blank screen.**
 
 Acceptance criteria:
+
 - When no assets exist, the main area shows a full empty state with the heading "Start your register".
 - An "Add asset" primary button is prominently offered.
 - After the first asset is added, the empty state is replaced by the normal table view.
@@ -164,6 +174,7 @@ Acceptance criteria:
 **As an IT Coordinator, I want to jump directly to available or maintenance assets from the sidebar so I can manage the relevant queue without manual filtering.**
 
 Acceptance criteria:
+
 - Sidebar links for Available, Maintenance, Retired, and Assigned to me pre-apply the corresponding status (or assignee) filter.
 - The count badge next to each link reflects the live total for that category.
 - The active link is visually distinguished from inactive links.
@@ -174,20 +185,20 @@ Acceptance criteria:
 
 ### 6.1 Asset Data Fields
 
-| Field | Required | Type | Notes |
-|---|---|---|---|
-| Name | Yes | Text | Human-readable, e.g. "MacBook Pro 14" M4" |
-| Serial number | Yes | Text | Manufacturer serial |
-| Type | Yes | Enum | Laptop \| Monitor \| Accessory \| Tablet |
-| Status | Yes | Enum | Available \| In use \| Maintenance \| Retired |
-| Assigned to | No | Employee ref | Null if unassigned |
-| Location | No | Text | e.g. "London HQ · Floor 3" |
-| Purchased | No | Date | |
-| Warranty until | No | Date | |
-| Value | No | Currency | |
-| Supplier | No | Text | |
-| Purchase order | No | Text | Reference only |
-| Notes | No | Text | Free text; e.g. maintenance context |
+| Field          | Required | Type         | Notes                                         |
+| -------------- | -------- | ------------ | --------------------------------------------- |
+| Name           | Yes      | Text         | Human-readable, e.g. "MacBook Pro 14" M4"     |
+| Serial number  | Yes      | Text         | Manufacturer serial                           |
+| Type           | Yes      | Enum         | Laptop \| Monitor \| Accessory \| Tablet      |
+| Status         | Yes      | Enum         | Available \| In use \| Maintenance \| Retired |
+| Assigned to    | No       | Employee ref | Null if unassigned                            |
+| Location       | No       | Text         | e.g. "London HQ · Floor 3"                    |
+| Purchased      | No       | Date         |                                               |
+| Warranty until | No       | Date         |                                               |
+| Value          | No       | Currency     |                                               |
+| Supplier       | No       | Text         |                                               |
+| Purchase order | No       | Text         | Reference only                                |
+| Notes          | No       | Text         | Free text; e.g. maintenance context           |
 
 ### 6.2 Asset Status Lifecycle
 
@@ -207,25 +218,25 @@ All authenticated users have full access to all features in v1.0. Role-based acc
 
 ## 7. Technical Stack
 
-| Concern | Decision |
-|---|---|
-| Platform | Power Apps Code App (React + Vite) |
-| Authentication | Handled by Power Apps; no separate login required |
-| Data persistence | Dataverse |
-| Employee directory | Office 365 Users connector (name and email lookup for "Assigned to" field) |
+| Concern            | Decision                                                                                    |
+| ------------------ | ------------------------------------------------------------------------------------------- |
+| Platform           | Power Apps Code App (React + Vite)                                                          |
+| Authentication     | Handled by Power Apps; no separate login required                                           |
+| Data persistence   | Dataverse                                                                                   |
+| Employee directory | Existing Microsoft Entra ID (aaduser) table (name and email lookup for "Assigned to" field) |
 
 ---
 
 ## 8. Non-Functional Requirements
 
-| Requirement | Target |
-|---|---|
-| Page load (≤ 500 assets) | < 2 seconds |
-| Search response | ≤ 200ms debounce |
-| Accessibility | WCAG 2.1 AA |
-| Browser support | Chrome, Edge, Safari, Firefox (current − 1) |
-| Dark mode | Supported via system preference or manual toggle |
-| Responsive | Desktop-first; usable down to 1024px width |
+| Requirement              | Target                                           |
+| ------------------------ | ------------------------------------------------ |
+| Page load (≤ 500 assets) | < 2 seconds                                      |
+| Search response          | ≤ 200ms debounce                                 |
+| Accessibility            | WCAG 2.1 AA                                      |
+| Browser support          | Chrome, Edge, Safari, Firefox (current − 1)      |
+| Dark mode                | Supported via system preference or manual toggle |
+| Responsive               | Desktop-first; usable down to 1024px width       |
 
 ---
 
@@ -282,10 +293,10 @@ Click the asset row
 
 ## 10. Success Metrics
 
-| Metric | Baseline | Target (90 days post-launch) |
-|---|---|---|
-| % of IT assets registered in the system | ~0% (spreadsheets only) | 100% of active hardware |
-| Time to look up asset holder | ~5 min (email / spreadsheet) | < 30 seconds |
-| Onboarding equipment allocation time | Ad hoc | Same day, self-serve by IT Coordinator |
-| Data staleness (assets with outdated assignee) | Unknown | < 5% of records |
-| User adoption (IT team logins per week) | 0 | All IT staff weekly active |
+| Metric                                         | Baseline                     | Target (90 days post-launch)           |
+| ---------------------------------------------- | ---------------------------- | -------------------------------------- |
+| % of IT assets registered in the system        | ~0% (spreadsheets only)      | 100% of active hardware                |
+| Time to look up asset holder                   | ~5 min (email / spreadsheet) | < 30 seconds                           |
+| Onboarding equipment allocation time           | Ad hoc                       | Same day, self-serve by IT Coordinator |
+| Data staleness (assets with outdated assignee) | Unknown                      | < 5% of records                        |
+| User adoption (IT team logins per week)        | 0                            | All IT staff weekly active             |
