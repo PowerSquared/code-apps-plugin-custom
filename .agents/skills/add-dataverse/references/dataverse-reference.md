@@ -55,6 +55,28 @@ records.filter(r => r.statuscode === 'Active');
 
 **MultiSelect Choice** (`MultiSelectPicklistType`): stores multiple integer values. Not supported in workflows, business rules, charts, rollups, or calculated columns.
 
+### Mapping Between Domain Types and Generated Picklist Types
+
+Generated Dataverse models type picklist fields as numeric literal unions (e.g. `1 | 2 | 3 | 4`). When your app uses string domain types (`'available' | 'inuse' | 'retired'`), TypeScript cannot verify a plain lookup assignment between them. Use `as unknown as` double casts in your mapper:
+
+```typescript
+// Lookup table mapping domain strings → Dataverse integers
+const STATUS_TO_DV: Record<AssetStatus, number> = {
+  available: 100000000,
+  inuse:     100000001,
+  retired:   100000002,
+};
+
+// Mapper (safe: lookup is exhaustive and tested at build time)
+crc13_status: STATUS_TO_DV[asset.status] as unknown as Crc13_assetsBase['crc13_status'],
+
+// Reverse mapper (Dataverse integer → domain string)
+const DV_TO_STATUS: Record<number, AssetStatus> = { ... };
+status: DV_TO_STATUS[record.crc13_status as number] as unknown as AssetStatus,
+```
+
+Contain all such casts inside a single mapper module — unsafety is isolated and the lookup tables serve as the runtime safety net.
+
 ## Virtual/Formatted Fields - CRITICAL
 
 Fields ending in `name` (e.g., `prefix_statusname`, `prefix_categoryname`) are often `VirtualType` -- computed, read-only fields that **cannot be selected in OData queries**. They cause errors like:
@@ -70,6 +92,27 @@ select: ['prefix_status']
 ```
 
 Check the generated model's `x-ms-dataverse-type`: if it's `VirtualType`, don't include in `select`.
+
+**Lookup `*name` and `*yominame` fields are also virtual.** The generated model includes properties like `_primarycontactid_value@OData.Community.Display.V1.FormattedValue` as a display name alongside the lookup GUID. These look selectable in TypeScript but will cause a 400 error if added to `$select`. The display name is returned as an OData **annotation**, not a column.
+
+```typescript
+// WRONG - *name suffix on a lookup is virtual, causes 400
+select: ['name', '_primarycontactid_value', 'primarycontactidname']
+
+// CORRECT - omit the *name field; read the annotation in your mapper instead
+select: ['name', '_primarycontactid_value']
+
+// Read the lookup display name from the annotation key (not a model property)
+const contactName = (record as Record<string, unknown>)[
+  '_primarycontactid_value@OData.Community.Display.V1.FormattedValue'
+] as string ?? '';
+```
+
+The annotation is **not returned by default** — the request must include:
+```
+Prefer: odata.include-annotations="OData.Community.Display.V1.FormattedValue"
+```
+Verify the generated service (or a wrapper) is sending this header. Without it, the formatted value is missing even though the field is not in `$select`.
 
 ## Formatted Values (Server-Side Formatting) - IMPORTANT
 
@@ -135,7 +178,7 @@ See [Lookup properties](https://learn.microsoft.com/en-us/power-apps/developer/d
 ```typescript
 // CORRECT - Read the related record's GUID via _value property
 const result = await AccountsService.getAll({
-  select: ['name', '_primarycontactid_value', 'primarycontactidname']
+  select: ['name', '_primarycontactid_value']
 });
 for (const account of result.data || []) {
   if (account._primarycontactid_value) {
@@ -278,6 +321,79 @@ const [formData, setFormData] = useState<{
 });
 ```
 
+## Data Fetching Patterns - CRITICAL
+
+Use `useEffect` for initial data loads. The `useState` initializer function runs **once to set the initial value** — it is not a side-effect hook and will not correctly trigger data fetching.
+
+```typescript
+// WRONG - useState initializer is not for side effects
+const [assets, setAssets] = useState(() => { refetch(); return []; });
+
+// CORRECT - useEffect triggers the fetch after the first render
+useEffect(() => {
+  refetch();
+}, [refetch]);
+```
+
+---
+
+## User Identity
+
+Two different user IDs exist in Power Platform. Do not confuse them:
+
+| ID | How to get it | Works locally? | Use for |
+|----|---------------|----------------|---------|
+| AAD Object ID | `getContext` SDK (see below) | Yes | Displaying name, email, UPN |
+| Dataverse System User ID | `Xrm.Utility.getGlobalContext().getUserId()` | No | Filtering by `ownerid` column |
+
+```typescript
+// AAD Object ID — works in local dev and production
+import { getContext } from '@microsoft/power-apps/app';
+const ctx = await getContext();
+const fullName      = ctx.user.fullName;           // "Jane Smith"
+const upn           = ctx.user.userPrincipalName;  // "jane@contoso.com"
+const aadObjectId   = ctx.user.objectId;           // AAD GUID (no curly braces)
+
+// Dataverse System User ID — production only (Xrm not available locally)
+const rawId       = Xrm.Utility.getGlobalContext().getUserId(); // "{GUID}"
+const systemUserId = rawId.replace(/[{}]/g, '');
+```
+
+**`Xrm` is only available in hosted Power Platform environments.** Wrap Xrm calls in a try/catch. Features that depend on the system user ID (e.g., a "Mine" filter on `ownerid`) will silently return no results during local development — this is acceptable.
+
+**`executeAsync` does not support `'whoAmI'`** — it only accepts `'getEntityMetadata'` and `'customapi'`. Passing `'whoAmI'` causes a compile-time `TS2322` error.
+
+---
+
+## Generated Type Strictness
+
+The generated service types are stricter than the Dataverse Web API. Two known gaps:
+
+### System fields on create
+
+`create()` is typed to require the full record including `ownerid`, `owneridtype`, and `statecode`. In practice, Dataverse sets these automatically — you do not need to supply them. Cast through `unknown` at the call site:
+
+```typescript
+await Crc13_assetsService.create(
+  assetToDv(data) as unknown as Parameters<typeof Crc13_assetsService.create>[0]
+);
+```
+
+If the generated types are ever updated to make these optional, the cast can be removed.
+
+### Null-clearing optional fields
+
+Generated types declare optional columns as `string | undefined`, not `string | null`. To clear a field on update, Dataverse expects `null`. Assign `null as unknown as string`:
+
+```typescript
+// In your PATCH mapper — clear the assignee field
+crc13_assignedto: asset.assignedTo ?? null as unknown as string,
+```
+
+Contain all such casts inside a single mapper function. This keeps the unsafe surface area small and easy to audit when generated types improve.
+
+---
+
 ## Common Dataverse API Errors
 
 | Error | Cause |
@@ -287,6 +403,7 @@ const [formData, setFormData] = useState<{
 | "Invalid property 'X' was found" | Property doesn't exist on entity. Verify field exists in Dataverse. |
 | TypeScript "no overlap" error | Comparing number field to string. Choice fields are numbers. |
 | TypeScript "not assignable to type 0" | useState inferred literal type from constant. Explicitly type state with `number`. |
+| TypeScript "Argument of type X is not assignable to parameter" on `create()` | System fields (`ownerid`, `owneridtype`, `statecode`) are required in generated type but optional in API. Cast through `unknown` at call site. |
 
 ## Column Type Quick Reference
 
