@@ -20,12 +20,16 @@ Check for `memory-bank.md` per `.agent-docs/shared-instructions.md`.
 
 ### Step 2: Add Connector
 
-**First, find the connection ID** (see `.agent-docs/connector-reference.md`):
+**Get the connection reference logical name** (see `.agent-docs/connector-reference.md`):
 
-Run the `/list-connections` skill. Find the Office 365 Outlook connection in the output (API name contains `office365`). If none exists, direct the user to create one using the environment-specific Connections URL — construct it from the active environment ID in context (from `power.config.json` or a prior step): `https://make.powerapps.com/environments/<environment-id>/connections` → **+ New connection** → search for the connector → Create.
+If the user has not provided a `connectionReferenceLogicalName`, ask for it:
+
+> "What is the connection reference logical name for Office 365 Outlook? You can find it in the Power Platform maker portal under **Solutions → [your solution] → Connection References**."
+
+Check `power.config.json` for the solution ID (`-s`). If not found, ask the user for it.
 
 ```bash
-npx power-apps add-data-source -a office365 -c <connection-id>
+npx power-apps add-data-source -a office365 -cr <connectionReferenceLogicalName> -s <solutionID>
 ```
 
 ### Step 3: Review Generated Service

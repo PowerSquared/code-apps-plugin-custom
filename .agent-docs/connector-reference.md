@@ -2,36 +2,35 @@
 
 Applies to all connector skills (`/add-azuredevops`, `/add-teams`, `/add-excel`, `/add-onedrive`, `/add-sharepoint`, `/add-office365`, `/add-mcscopilot`, `/add-connector`). Does NOT apply to Dataverse (`/add-dataverse`).
 
-## Connection ID (Required)
+## Connection Reference (Required)
 
-All non-Dataverse connectors require a **connection ID** (`-c`) when adding via `npx power-apps add-data-source`. Without it, the command fails with: `CONNECTION_ID argument is required for connector data sources`.
+All non-Dataverse connectors require a **connection reference logical name** (`-cr`) and a **solution ID** (`-s`) when adding via `npx power-apps add-data-source`. Using connection references (instead of raw connection IDs) is required for proper Power Platform ALM — connection references are solution-aware and portable across environments.
 
-### Step 1: List Existing Connections
+### Getting the Connection Reference Logical Name
 
-Run the `/list-connections` skill. It runs `pac connection list` and returns a table of connection IDs and connector names (requires the Power Platform CLI to be installed and authenticated).
+If the user has not provided the `connectionReferenceLogicalName`, ask for it before proceeding:
 
-Look for the connector in the output. Note the **ConnectionId** column value.
+> "What is the connection reference logical name for this connector? You can find it in the Power Platform maker portal under **Solutions → [your solution] → Connection References**. It typically looks like `new_office365outlook_abc12`."
 
-### Step 2: If No Connection Exists
+If no connection reference exists yet for the connector in their solution, direct the user to:
+1. Open the maker portal: `https://make.powerapps.com/environments/<environment-id>/solutions`
+2. Open their solution
+3. Select **New → More → Connection reference**
+4. Choose the connector (e.g., "Office 365 Outlook", "Azure DevOps", "Teams") and link an existing connection
+5. Note the **logical name** that gets assigned
 
-The user must create one first:
+### Getting the Solution ID
 
-1. Construct the direct Connections URL using the active environment ID from context (from `power.config.json` or a prior step): `https://make.powerapps.com/environments/<environment-id>/connections`
-2. Share this link with the user and ask them to click **+ New connection**
-3. Search for and create the connector (e.g., "Office 365 Outlook", "Azure DevOps", "Teams")
-4. Complete the sign-in/consent flow
-5. Re-run `/list-connections` to get the new connection ID
+The solution ID (`-s`) is typically available in `power.config.json` in the project root. If not found there, ask the user for it — it can be found in the maker portal under **Solutions → [your solution] → Solution ID**.
 
-### Step 3: Use Connection ID
-
-Always pass `-c <connection-id>` when adding a connector:
+### Command Syntax
 
 ```bash
 # Non-tabular connectors
-npx power-apps add-data-source -a <api-name> -c <connection-id>
+npx power-apps add-data-source -a <api-name> -cr <connectionReferenceLogicalName> -s <solutionID>
 
 # Tabular connectors (also need -d and -t)
-npx power-apps add-data-source -a <api-name> -c <connection-id> -d '<dataset>' -t '<table>'
+npx power-apps add-data-source -a <api-name> -cr <connectionReferenceLogicalName> -s <solutionID> -d '<dataset>' -t '<table>'
 ```
 
 
