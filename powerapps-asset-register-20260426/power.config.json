@@ -1,0 +1,14 @@
+{
+  "version": "1.0",
+  "appId": "9cb941a1-5868-4635-9999-4fad3e04011d",
+  "appDisplayName": "Asset Register",
+  "region": "prod",
+  "environmentId": "b9c3b0a2-97dc-ef54-b6a9-d6077af7741e",
+  "description": " ",
+  "buildPath": "./dist",
+  "buildEntryPoint": "index.html",
+  "localAppUrl": "http://localhost:3000",
+  "logoPath": "Default",
+  "connectionReferences": {},
+  "databaseReferences": {}
+}
