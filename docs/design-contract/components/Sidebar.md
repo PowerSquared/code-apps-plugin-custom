@@ -14,6 +14,20 @@ The Sidebar is the persistent app-level navigation. It is always visible on the 
 - The active item gets the surface background (white); all others are transparent.
 - NavCounts appear only on items where a count is meaningful (filtered views like "Available", "Maintenance"). Not every item needs a count.
 - The Footer is visually separated by a top border and sits at the very bottom of the sidebar, regardless of how many nav items there are.
+- Every nav item must include a 16px stroked icon to the left of its label. Icons use the stroke colour of the surrounding text and are never filled.
+
+**Nav item order and icons** (top to bottom):
+
+| # | Label | Count badge | Icon |
+|---|-------|-------------|------|
+| 1 | Overview | — | grid / dashboard |
+| 2 | All assets | — | list / rows |
+| 3 | Assigned to me | ✓ | person / user |
+| 4 | Available | ✓ | check-circle |
+| 5 | Maintenance | ✓ | wrench / tool |
+| 6 | Retired | ✓ | archive / box |
+
+"All assets" carries no count badge — the total appears in the page subtitle instead.
 
 ## Do
 

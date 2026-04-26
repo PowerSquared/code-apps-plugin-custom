@@ -9,7 +9,7 @@ anatomy:
   - name: Nav
     description: Vertical list of NavItem elements.
   - name: NavItem
-    description: Icon + label + optional count badge; active state has surface background.
+    description: 16px stroked icon (never filled) + label + optional count badge; active state has surface background.
   - name: NavCount
     description: Right-aligned numeric count in text-subtle; shown on some nav items.
   - name: Footer
@@ -19,10 +19,19 @@ props:
   - name: items
     type: NavItem[]
     required: true
+    default: |
+      [
+        { id: "overview",   label: "Overview",        icon: "grid",         count: null },
+        { id: "all",        label: "All assets",       icon: "list",         count: null },
+        { id: "mine",       label: "Assigned to me",   icon: "user",         count: number },
+        { id: "available",  label: "Available",        icon: "check-circle", count: number },
+        { id: "maint",      label: "Maintenance",      icon: "wrench",       count: number },
+        { id: "retired",    label: "Retired",          icon: "archive",      count: number }
+      ]
   - name: activeItem
     type: string
     required: true
-    description: Label of the currently active navigation item.
+    description: id of the currently active navigation item.
   - name: user
     type: "{ name: string, role: string }"
     required: true

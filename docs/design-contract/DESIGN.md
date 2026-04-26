@@ -20,6 +20,10 @@ components:
     padding: "7px 10px"
     typography: "{typography.body}"
     gap: "{spacing.sm}"
+    icon:
+      size: "16px"
+      stroke: "currentColor"
+      fill: "none"
 
   sidebar-nav-item-active:
     backgroundColor: "{color.surface}"
@@ -43,20 +47,25 @@ components:
   # ── Page header ──────────────────────────────────────────────────────────
   page-header:
     padding: "28px {spacing.5xl} {spacing.xl}"
+    layout: "horizontal; title+subtitle on left, primary-action on right, vertically centred"
+    primaryAction: "btn-primary (+ Add asset) — right-aligned at the same height as the title"
 
   page-title:
     typography: "{typography.heading-lg}"
     color: "{color.text}"
+    content: "Mirrors the active sidebar nav item label (e.g. 'All assets', 'Available', 'Assigned to me')"
 
   page-sub:
     typography: "{typography.body}"
     color: "{color.text-muted}"
     marginTop: "{spacing.xs}"
+    content: "'{totalCount} items — {availableCount} available to assign' — use em dash (—), not middot (·)"
 
   # ── Toolbar ──────────────────────────────────────────────────────────────
   toolbar:
     padding: "0 {spacing.5xl} {spacing.lg}"
     gap: "{spacing.md}"
+    note: "Toolbar contains only search and filter controls — the primary Add action lives in page-header"
 
   search-input:
     backgroundColor: "{color.surface}"
@@ -74,6 +83,9 @@ components:
     padding: "{spacing.sm} {spacing.md}"
     typography: "{typography.body}"
     color: "{color.text}"
+    placeholders:
+      type: "All types"
+      status: "Any status"
 
   # ── Data table ───────────────────────────────────────────────────────────
   table:

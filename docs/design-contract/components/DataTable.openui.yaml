@@ -15,7 +15,7 @@ anatomy:
   - name: AssetCell
     description: First column cell containing asset name (bold) and serial number (muted, smaller).
   - name: Cell
-    description: All other data cells.
+    description: All other data cells. The Type cell specifically renders as plain body text — not as a Tag or pill component.
 
 props:
   - name: assets

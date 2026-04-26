@@ -41,7 +41,6 @@ git --version                          # Optional but recommended
 
 Note: `pac` CLI is **not** required for scaffold, init, add-data-source, build, or deploy. It is only needed for environment listing (`pac env list`) and connection listing (`pac connection list`).
 
-
 ### Step 2: Gather Requirements
 
 **Skip questions the user already answered in their initial instruction.**
@@ -56,12 +55,12 @@ Once you have their description:
 
 1. Confirm the app name and clarify the purpose if needed
 2. Ask about data -- focus on **what the app needs to do**, not specific technologies:
-   - "What data does your app need to work with?" (e.g., company emails, project tasks, custom business records)
-   - "Does your app need to search existing information, manage its own data, or both?"
-   - Based on their answers, recommend the best approach:
-     - **Store and manage custom business data** (tables, forms, CRUD) → Dataverse (`/add-dataverse`)
-     - **Interact with specific services** (send emails, post messages, manage files) → the appropriate connector
-   - If they mention existing Dataverse tables, SharePoint lists, or connectors by name, use those directly
+    - "What data does your app need to work with?" (e.g., company emails, project tasks, custom business records)
+    - "Does your app need to search existing information, manage its own data, or both?"
+    - Based on their answers, recommend the best approach:
+        - **Store and manage custom business data** (tables, forms, CRUD) → Dataverse (`/add-dataverse`)
+        - **Interact with specific services** (send emails, post messages, manage files) → the appropriate connector
+    - If they mention existing Dataverse tables, SharePoint lists, or connectors by name, use those directly
 3. Ask about UI requirements: key screens, layout, interactions, theme preference
 4. Ask any clarifying questions now -- resolve all ambiguity before entering plan mode
 
@@ -69,9 +68,9 @@ Once you have their description:
 
 1. Enter plan mode with `EnterPlanMode`
 2. Design the full implementation approach:
-   - Which `/add-*` skills to run for data sources
-   - App architecture: components, pages, state management
-   - Feature list with priority order
+    - Which `/add-*` skills to run for data sources
+    - App architecture: components, pages, state management
+    - Feature list with priority order
 3. Present plan for approval, include `allowedPrompts` from [prerequisites-reference.md](references/prerequisites-reference.md)
 4. Exit plan mode with `ExitPlanMode` when approved
 
@@ -89,7 +88,7 @@ You need an environment ID to pass to `init`. Three ways to get it:
 
 ### Step 5: Scaffold
 
-Ask the user for a folder name. Default to `powerapps-{app-name-slugified}-{timestamp}` if they don't have a preference.
+Ask the user for a folder name. Default to `powerapps-{app-name-slugified}` if they don't have a preference.
 
 **IMPORTANT: Use `npx degit` to download the template. Do NOT use `git clone`, do NOT manually create files, do NOT download from GitHub UI. `degit` downloads the template without git history.**
 
@@ -156,17 +155,17 @@ This ensures progress is saved even if the session ends unexpectedly.
 
 Invoke the `/add-*` skills identified in the plan (Step 3). Run each in sequence. **Pass context as arguments** so sub-skills skip redundant questions (project path, connector name, etc.):
 
-| App needs to...                            | Invoke             |
-| ------------------------------------------ | ------------------ |
-| Store/manage custom business data          | `/add-dataverse`   |
-| Track work items, bugs, pipelines          | `/add-azuredevops` |
-| Send or read Teams messages                | `/add-teams`       |
-| Read/write Excel spreadsheet data          | `/add-excel`       |
-| Upload, download, or manage files          | `/add-onedrive`    |
-| Work with SharePoint lists or docs         | `/add-sharepoint`  |
-| Send emails, read inbox, manage calendar   | `/add-office365`   |
-| Invoke a Copilot Studio agent              | `/add-mcscopilot`  |
-| Connect to another service                 | `/add-connector`   |
+| App needs to...                          | Invoke             |
+| ---------------------------------------- | ------------------ |
+| Store/manage custom business data        | `/add-dataverse`   |
+| Track work items, bugs, pipelines        | `/add-azuredevops` |
+| Send or read Teams messages              | `/add-teams`       |
+| Read/write Excel spreadsheet data        | `/add-excel`       |
+| Upload, download, or manage files        | `/add-onedrive`    |
+| Work with SharePoint lists or docs       | `/add-sharepoint`  |
+| Send emails, read inbox, manage calendar | `/add-office365`   |
+| Invoke a Copilot Studio agent            | `/add-mcscopilot`  |
+| Connect to another service               | `/add-connector`   |
 
 Each `/add-*` skill runs `npm run build` to catch errors. Do NOT deploy yet.
 
@@ -211,13 +210,13 @@ Provide:
 - What was built: features, data sources, components
 - Next steps: how to iterate (`npm run build && npx power-apps push`), how to add more data sources
 - Suggest what else the app could do:
-  - `/add-datasource` -- add another data source (describe what you need, and the plugin will recommend the best approach)
-  - `/add-dataverse` -- store and manage custom business data
-  - `/add-azuredevops` -- track work items, bugs, and pipelines
-  - `/add-teams` -- send and read Teams messages
-  - `/add-sharepoint` -- work with SharePoint lists or documents
-  - `/add-office365` -- send emails, manage calendar
-  - `/add-connector` -- connect to any other service
+    - `/add-datasource` -- add another data source (describe what you need, and the plugin will recommend the best approach)
+    - `/add-dataverse` -- store and manage custom business data
+    - `/add-azuredevops` -- track work items, bugs, and pipelines
+    - `/add-teams` -- send and read Teams messages
+    - `/add-sharepoint` -- work with SharePoint lists or documents
+    - `/add-office365` -- send emails, manage calendar
+    - `/add-connector` -- connect to any other service
 - Manage at https://make.powerapps.com/environments/<environment-id>/home
 
 ### Update Memory Bank
@@ -277,15 +276,15 @@ npx power-apps push
 
 **Files changed:**
 
-| File                                          | Change                                                |
-| --------------------------------------------- | ----------------------------------------------------- |
+| File                                          | Change                                                      |
+| --------------------------------------------- | ----------------------------------------------------------- |
 | `power.config.json`                           | Created by `npx power-apps init` — contains `environmentId` |
 | `src/generated/models/Cr123_taskModel.ts`     | Generated by `npx power-apps add-data-source`               |
 | `src/generated/services/Cr123_taskService.ts` | Generated by `npx power-apps add-data-source`               |
-| `src/components/TaskList.tsx`                 | Created — renders task list with status filter        |
-| `src/components/AddTaskForm.tsx`              | Created — form to add new tasks                       |
-| `src/App.tsx`                                 | Updated — wires components to `Cr123_taskService`     |
-| `memory-bank.md`                              | Created in Step 7, updated in Step 11                 |
+| `src/components/TaskList.tsx`                 | Created — renders task list with status filter              |
+| `src/components/AddTaskForm.tsx`              | Created — form to add new tasks                             |
+| `src/App.tsx`                                 | Updated — wires components to `Cr123_taskService`           |
+| `memory-bank.md`                              | Created in Step 7, updated in Step 11                       |
 
 **Final assistant summary (verbatim format):**
 

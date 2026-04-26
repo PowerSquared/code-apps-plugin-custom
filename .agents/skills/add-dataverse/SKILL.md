@@ -15,7 +15,7 @@ compatibility: Requires pac CLI, a Power Platform environment, and optionally Az
 
 # Add Dataverse
 
-Two paths: **existing tables** (skip to Step 5) or **new tables** (full workflow).
+Two paths — but Step 5 (Add Data Source) is always required for every table. If tables already exist, skip Steps 2–4 and go straight to Step 5. If creating new tables, follow the full workflow.
 
 ## Workflow
 
@@ -88,6 +88,8 @@ Use safe functions from [table-management-reference.md](references/table-managem
 
 ### Step 5: Add Data Source
 
+⚠️ Required for ALL tables — both newly created and pre-existing. Never skip this step.
+
 For each table:
 
 ```bash
@@ -106,15 +108,15 @@ The command generates:
 Show the user a usage example:
 
 ```typescript
-import { AccountsService } from "../generated/services/AccountsService";
+import { AccountsService } from "../generated/services/AccountsService"
 
 const result = await AccountsService.getAll({
-  select: ["name", "accountnumber"],
-  filter: "statecode eq 0",
-  orderBy: ["name asc"],
-  top: 50
-});
-const accounts = result.data || [];
+	select: ["name", "accountnumber"],
+	filter: "statecode eq 0",
+	orderBy: ["name asc"],
+	top: 50,
+})
+const accounts = result.data || []
 ```
 
 **Key rules:**
