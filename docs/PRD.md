@@ -229,14 +229,13 @@ All authenticated users have full access to all features in v1.0. Role-based acc
 
 ## 8. Non-Functional Requirements
 
-| Requirement              | Target                                           |
-| ------------------------ | ------------------------------------------------ |
-| Page load (≤ 500 assets) | < 2 seconds                                      |
-| Search response          | ≤ 200ms debounce                                 |
-| Accessibility            | WCAG 2.1 AA                                      |
-| Browser support          | Chrome, Edge, Safari, Firefox (current − 1)      |
-| Dark mode                | Supported via system preference or manual toggle |
-| Responsive               | Desktop-first; usable down to 1024px width       |
+| Requirement              | Target                                      |
+| ------------------------ | ------------------------------------------- |
+| Page load (≤ 500 assets) | < 2 seconds                                 |
+| Search response          | ≤ 200ms debounce                            |
+| Accessibility            | WCAG 2.1 AA                                 |
+| Browser support          | Chrome, Edge, Safari, Firefox (current − 1) |
+| Responsive               | Desktop-first; usable down to 1024px width  |
 
 ---
 

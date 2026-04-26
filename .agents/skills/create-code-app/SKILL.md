@@ -178,7 +178,7 @@ Each `/add-*` skill runs `npm run build` to catch errors. Do NOT deploy yet.
 1. **Review generated services**: Use `Grep` to find methods in generated service files (they can be very large -- see `.agent-docs/connector-reference.md`). Do NOT read entire generated files.
 2. **Build components**: Create React components for each screen/feature in the plan
 3. **Connect data**: Wire components to generated services (use `*Service.getAll()`, `*Service.create()`, etc.)
-4. **Apply theme**: Use the user's theme preference (default: dark theme per development standards)
+4. **Apply theme**: Use the user's theme preference from Step 2 (light/dark) to set CSS variables or class names. Don't ask again.
 5. **Iterate with user**: Show progress, ask for feedback, adjust as needed
 
 **Key rules:**
